@@ -5,18 +5,20 @@ export default class Form extends React.Component {
     super(props);
 
     this.state = {
-      date: (new Date()).toString()
+      date: (new Date()).toString(),
+      response: "",
     };
   }
 
   onChange = (e) => this.setState({ date: e.target.value })
 
-  handleSubmit(e) {
-//     var date = this.state.date;
-//     window.location.href = "localhost:8080/RoverExercise?date=" + date;
-    e.preventDefault();
-    fetch(`/RoverExercise?date=${encodeURIComponent(this.state.date)}`)
-      .then(response => response.json());
+  handleSubmit() {
+    const url = "http://localhost:8080/RoverExercise?date=" + this.state.date;
+    fetch(url, { method: 'GET', mode: 'no-cors' })
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      });
   }
 
   render() {
@@ -24,8 +26,9 @@ export default class Form extends React.Component {
       <div class="App">
       <input type="date" name="date" value={this.state.date} onChange={this.onChange} required/>
       <input type="submit" value="Submit" onClick={this.handleSubmit.bind(this)}/>
+      <br></br>
+      <textarea value={this.state.response} readonly={true}/>
       </div>
-
     );
 
 
@@ -33,14 +36,3 @@ export default class Form extends React.Component {
   }
 
 }
-
-/*
-export default function App() {
-  return (
-    <div className="App">
-    <input type="date"  name="date" ng-model="value"
-    placeholder="MM-DD-YYYY" min="06-03-2015" max="03-17-2022" required/>
-    <input type="submit" value="Submit" onClick={this.handleSubmit.bind(this)}/>
-    </div>
-  );
-}*/

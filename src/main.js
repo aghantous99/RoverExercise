@@ -30,7 +30,7 @@ const requestPhotos = async function (req, res, next) {
     const input_date = req.query["date"];
     const date = new Date(input_date);
     if (input.isInvalidDate(date)) {
-        res.status(400).send({ error: "Invalid input date." });
+        res.status(400).json({ error: "Invalid input date." });
         return;
     }
 
@@ -49,7 +49,7 @@ const requestPhotos = async function (req, res, next) {
         filenames = fs.readdirSync(path);
 
         if (filenames.length != 0) {
-            res.status(200).send({ count: filenames.length });
+            res.status(200).json({ count: filenames.length, path: path, files: filenames });
             return;
         }
     } else
@@ -65,12 +65,17 @@ const requestPhotos = async function (req, res, next) {
         {
             api.savePhotosToPath(photoUrls, path);
         } else {
-            res.status(204).send({ error: "API returns null" });
+            res.status(204).json({ error: "API returns null" });
         }
 
+        filenames = fs.readdirSync(path);
+        if (filenames.length != 0) {
+            res.status(200).json({ count: filenames.length, path: path, files: filenames });
+            return;
+        }
     }
     catch (ex) {
-        res.status(500).send({ error: ex.toString() });
+        res.status(500).json({ error: ex.toString() });
     }
 
 
