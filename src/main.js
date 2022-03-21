@@ -2,7 +2,8 @@
 
 // Set environment variables
 process.env.PORT = 8080;
-process.env.NASA_API_KEY = "DEMO_KEY";
+// process.env.NASA_API_KEY = "DEMO_KEY";
+process.env.NASA_API_KEY = "4dHNFbmcqTqKAppJ0LNqDDJoTsET5egsjWYqQGjk";
 
 
 const express = require('express');
@@ -18,7 +19,7 @@ const router = express.Router();
  * Purpose: Parse input and get photos from Rover API. Do caching as well if needed.
  * Arguments: Request object, Response object, Express Next object
  */
-const requestPhotos = function (req, res, next) {
+const requestPhotos = async function (req, res, next) {
     // URL validation
     if (req.method !== 'GET') {
         res.status(404).send("404 Not Found");
@@ -58,7 +59,8 @@ const requestPhotos = function (req, res, next) {
     {
         console.log("Running API");
 
-        let photoUrls = api.requestPhotosByDate(format_date);
+        let photoUrls = await api.requestPhotosByDate(format_date);
+
         if (photoUrls.length)
         {
             api.savePhotosToPath(photoUrls, path);
@@ -80,10 +82,8 @@ const requestPhotos = function (req, res, next) {
 app.use(requestPhotos)
 app.use('/', router);
 
-router.get('/Rover', (req, res) => {
+router.get('/RoverExercise', (req, res) => {
     let responseText = req.requestPhotos
-//     res.send(responseText)
-    //     await controller.getRoverPhotos(req, res);
 });
 
 app.listen(process.env.PORT, () => {

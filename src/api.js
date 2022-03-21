@@ -17,7 +17,7 @@ const fs = require("fs");
  */
 function requestPhotosByDate(date) {
 
-    let i = 0;
+    let i_ = 0;
     let arrData = new Array();
 
     return new Promise((res, rej) => {
@@ -43,9 +43,9 @@ function requestPhotosByDate(date) {
                         arrData.push(photo.img_src);
                     });
 
-                    ++i;
+                    ++i_;
 
-                    if (i === api_rovers.length) {
+                    if (i_ === api_rovers.length) {
                         res(arrData);
                     }
                 });
@@ -60,8 +60,9 @@ function requestPhotosByDate(date) {
     });
 }
 
-function savePhotosToPath(arr, path) {
-    arr.forEach((url) => {
+function savePhotosToPath(arrPhoto, path) {
+
+    arrPhoto.forEach((url) => {
         https.get(url, (photo) =>
         {
             let imgNameArr = url.split("/");
